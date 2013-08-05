@@ -17,6 +17,8 @@ class character(object):
 		self.mp = self.intel * 6
 		self.x = 1
 		self.y = 1
+		self.lv = 1
+		self.xp = 0
 	
 	def nav(self,x,y,room):
 		if room.contains(x,y) == False:
@@ -47,6 +49,8 @@ class character(object):
 						kq2 = war.fight()
 						check(kq2, "You have been defeated! Loser!")
 						if kq2 == True:
+							print("+%d XP") % cell.xp
+							self.lvup(cell.xp)
 							room.cells[cell.y][cell.x] = ' '
 					else:
 						kq2 = war.flee()
@@ -54,10 +58,22 @@ class character(object):
 							kq2 = war.fight()
 							check(kq2, "You have been defeated! Loser!")
 							if kq2 == True:
+								print("+%d XP") % cell.xp
+								self.lvup(cell.xp)
 								room.cells[cell.y][cell.x] = ' '
 			return True
 		else:
 			return 'F'
+
+	def lvup(self, xp):
+		self.xp += xp
+		while self.xp >= self.lv * (self.lv + 25):
+			self.lv += 1
+			self.att += 2
+			self.defe += 2
+			self.intel += 2
+			print("Level up! You are now level %d") % self.lv
+			print("+2 attack, defense, intelligent!")
 
 
 
@@ -87,6 +103,8 @@ class room(object):
 
 	
 	def show(self, pl):
+		print("Level: %d; EXP: %d") % (pl.lv, pl.xp)
+		print("Attack: %d; Defense: %d; Intelligent: %d.") % (pl.att, pl.defe, pl.intel)
 		print("HP: %d     MP: %d\n") % (pl.hp, pl.mp)
 		for line in self.cells:
 			for cell in line:
@@ -168,8 +186,6 @@ class battle(object):
 			if crit_1 == 1:
 				damage_1 *= 2
 
-			sleep(1)
-
 			op2 = randint(1,5)
 			if op2 == 5:
 				dodge = True
@@ -183,6 +199,7 @@ class battle(object):
 			if crit_2 == 1:
 				damage_2 *= 2
 
+			sleep(1)
 			print("")
 
 			if op1 == '1' and dodge == False:
@@ -251,7 +268,7 @@ class battle(object):
 ##############################
 ### monster
 class monster(object):
-    def __init__(self,x,y,room,name,att,defe,intdef,hp):
+    def __init__(self,x,y,room,name,att,defe,intdef,hp,xp):
 		check = True
 		for m in room.monsters:
 			if (x, y) == (m.x, m.y):
@@ -267,6 +284,7 @@ class monster(object):
 			self.defe = defe
 			self.intdef = intdef
 			self.hp = hp
+			self.xp = xp
 		else:
 			del self
 
@@ -325,10 +343,10 @@ room1 = room(width,height,[])
 add = []
 while not len(add) == 5:
 	a, b = randint(1, width-1), randint(1, width-1)
-	add.append(monster(a,b,room1,'Bat',55,35,20,2200))
+	add.append(monster(a,b,room1,'Bat',55,35,20,2200,13))
 
 a, b = randint(1, width-1), randint(1, height-1)
-add.append(monster(a,b,room1,'JB',65,40,8,2600))
+add.append(monster(a,b,room1,'JB',65,40,8,2600,50))
 
 room1.addmonsters(add)
 
@@ -364,11 +382,13 @@ room1.show(player)
 
 """Now the main part of the game"""
 
+print("\n Now, enter a any sequence of W,S,A,D to move."),
+print("For example: SA will move you down once, then left once.\n")
+
+
 wall = "You ran into a wall and die! Loser!"
 while True:
 	try:
-		print("\n Now, enter a any sequence of W,S,A,D to move."),
-		print("For example: SA will move you down once, then left once.\n")
 		move = raw_input("> ").strip('\\')
 		for ch in move:
 			if ch == 'W' or ch == 'w':
@@ -390,4 +410,3 @@ while True:
 	if room1.win() == True:
 		print("You win!")
 		print("Press CTRL+D to quit")
-
