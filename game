@@ -194,7 +194,7 @@ class battle(object):
 				diff = self.p2.att - self.p1.defe
 				if diff < 0:
 					diff = 0
-				damage_2 = randint(15,125) + diff*8
+				damage_2 = randint(15,125) + diff*10
 			crit_2 = randint(1,10)
 			if crit_2 == 1:
 				damage_2 *= 2
@@ -341,12 +341,15 @@ height = 10
 room1 = room(width,height,[])
 
 add = []
-while not len(add) == 5:
+while not len(add) == 6:
 	a, b = randint(1, width-1), randint(1, width-1)
-	add.append(monster(a,b,room1,'Bat',55,35,20,2200,13))
+	try:
+		add.append(monster(a,b,room1,'Bat',55,40,30,2200,13))
+	except TypeError:
+		pass
 
 a, b = randint(1, width-1), randint(1, height-1)
-add.append(monster(a,b,room1,'JB',65,40,8,2600,50))
+add.append(monster(a,b,room1,'JB',65,40,8,2600,60))
 
 room1.addmonsters(add)
 
@@ -384,7 +387,6 @@ room1.show(player)
 
 print("\n Now, enter a any sequence of W,S,A,D to move."),
 print("For example: SA will move you down once, then left once.\n")
-
 
 wall = "You ran into a wall and die! Loser!"
 while True:
