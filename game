@@ -390,3 +390,4 @@ while True:
 	if room1.win() == True:
 		print("You win!")
 		print("Press CTRL+D to quit")
+
