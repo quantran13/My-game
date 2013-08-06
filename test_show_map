@@ -1,0 +1,19 @@
+#!/usr/bin/python
+
+f = open("map", 'r')
+s = ' '
+map = []
+
+while s != '':
+	s = f.readline().strip('\n')
+	map.append(s.split(' '))
+
+for x in map:
+	for y in x:
+		if y == '1':
+			print "[x]",
+		elif y == '0':
+			print "[ ]",
+	print ""
+
+f.close()
