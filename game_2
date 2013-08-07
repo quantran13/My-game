@@ -84,14 +84,13 @@ class room(object):
 		self.monsters = monsters
 
 		self.width = 14
-		self.height = -1
+		self.height = 12
 		f = open(maze, 'r')
 		self.cells = []
 		s = ' '
 		while s != '':
 			s = f.readline().strip('\n')
 			self.cells.append(s.split(' '))
-			self.height += 1
 		self.cells.pop()
 
 		for monster in monsters:
@@ -115,10 +114,10 @@ class room(object):
 			for cell in line:
 				if cell == '1':
 					print "[x]",
-				elif cell == '0':
-					print "[ ]",
 				elif isinstance(cell, character):
 					print "[o]",
+				else:
+					print "[ ]",
 			print ""
 
 	def addmonsters(self, addm):
@@ -265,25 +264,15 @@ class battle(object):
 ##############################
 ### monster
 class monster(object):
-    def __init__(self,x,y,room,name,att,defe,intdef,hp,xp):
-		check = True
-		for m in room.monsters:
-			if (x, y) == (m.x, m.y):
-				check = False
-				break
-
-
-		if check == True:
-			self.x = x
-			self.y = y
-			self.name = name
-			self.att = att
-			self.defe = defe
-			self.intdef = intdef
-			self.hp = hp
-			self.xp = xp
-		else:
-			del self
+    def __init__(self,x,y,name,att,defe,intdef,hp,xp):
+		self.x = x
+		self.y = y
+		self.name = name
+		self.att = att
+		self.defe = defe
+		self.intdef = intdef
+		self.hp = hp
+		self.xp = xp
 
 
 
@@ -331,28 +320,23 @@ print("\tName: %s; Attack: %d; Defense: %d; Intelligent: %s\n")\
 
 """Add a room and some monsters"""
 
-room1 = room("map",[])
-print room1.width, room1.height
-room1.show(player)
-width = room1.width
-height = room1.height
+width = 14
+height = 12
 
 a = 1
 b = 1
 add = []
 while not len(add) == 6:
-	while room1.cells[b][a] == '1':
-		a, b = randint(0, width-1), randint(0, width-1)
+	a, b = randint(0, width-1), randint(0, width-1)
 	try:
-		add.append(monster(a,b,room1,'Bat',55,40,30,2200,13))
+		add.append(monster(a,b,'Bat',55,40,30,2200,13))
 	except TypeError:
 		pass
 
-while room1.cells[b][a] == '1':
-	a, b = randint(0, width-1), randint(0, height-1)
-add.append(monster(a,b,room1,'JB',65,40,8,2600,60))
+a, b = randint(0, width-1), randint(0, height-1)
+add.append(monster(a,b,'JB',65,40,8,2600,60))
 
-room1.addmonsters(add)
+room1 = room("map",add)
 
 """First step here"""
 
