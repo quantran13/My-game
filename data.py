@@ -162,10 +162,11 @@ class battle(object):
 				if op1 == '2':
 					if mp < 30:
 						print("Not enough mana!")
-						op1 = '0'
+						op1 = ''
 				elif op1 == '3':
 					if mp < 25:
 						print("Not enough mana!")
+						op1 = ''
 			if op1 == '1':
 				diff = self.p1.att - self.p2.defe
 				if diff < 0:
