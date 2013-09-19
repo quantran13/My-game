@@ -1,5 +1,6 @@
 from random import randint, random
 from time import sleep 
+from check import *
 
 
 ##############################
